@@ -39,7 +39,7 @@ class Artist(db.Model):
     nickname    = db.Column(db.String(80), unique=True)
     images      = db.Column(db.Text)
     geolocation = db.Column(db.Text)
-    description = db.Column(db.Text)
+    description = db.Column(db.Text, default="")
     pub_date    = db.Column(db.DateTime)
     art         = db.Column(db.Text)
     performing  = db.Column(db.Boolean, default=False)
@@ -61,7 +61,7 @@ class Product(db.Model):
     id          = db.Column(db.Integer, primary_key=True)
     name        = db.Column(db.String(50))
     price       = db.Column(db.String(50), default="0.0")
-    description = db.Column(db.Text)
+    description = db.Column(db.Text, default="")
     sold        = db.Column(db.Integer, default=0) 
     images      = db.Column(db.Text, default="")
 
@@ -180,15 +180,29 @@ def mock_data():
     artist4.products.append(product4)
 
     product5 = Product('Tip :)', '0.50')
-    artist5 = Artist('StreetDrawer', 'drawer', '40.383333;-3.716667', images="http://thumbs.dreamstime.com/x/famous-mural-graffiti-berlin-taken-cuvrystrasse-30204139.jpg")
+    product5.images = "http://www.delebimba.com/images/articles/musico1.jpg"
+    artist5 = Artist('StreetDrawer', 'plastic artist', '40.383333;-3.716667', images="http://thumbs.dreamstime.com/x/famous-mural-graffiti-berlin-taken-cuvrystrasse-30204139.jpg")
     artist5.products.append(product5)
 
     product6 = Product('Hand-made high quality bubble soap', '4.0')
     artist6 = Artist('Bubblemaker', 'performance', '40.383333;-3.716667', images="http://i.telegraph.co.uk/multimedia/archive/01455/bubbleman_1455955c.jpg")
     artist6.products.append(product6)
 
-    db.session.add_all([artist1, artist2, product1, product2, artist5, product6])
-    db.session.add_all([artist3, artist4, product3, product4, artist6, product5])
+    product7 = Product('Private show', '97.00')
+    product7.description = "Are you going to throw a private party and you need his services? DJ Grandpa will go to your home and keep it lively whole night! (Only Madrid's metropolitan area)"
+    
+    product8 = Product('Record', '32.00')
+    product8.description = "Get the best hits that have been sounding in the streets in the last year"
+
+    artist7 = Artist('DjGranpa', 'DJ', '40.4110771;-3.7087732', images="http://www.camdennewjournal.com/sites/all/files/nj_camden/imagecache/main_img/images/news/grandpa.jpg")
+    artist7.description = """The best DJ in Madrid is here to make you dance! A living legend that has been in this world for longer than anyone can remember, has come to teach you a few tricks. 
+High volume, great music... even a dance floor is provided so you can shake that body!"""
+    artist7.products.append(product7)
+    artist7.products.append(product8)
+    artist7.performing = True
+
+    db.session.add_all([artist1, artist2, product1, product2, artist5, product6, product7, product8])
+    db.session.add_all([artist3, artist4, product3, product4, artist6, product5, artist7])
     db.session.commit()
 
 @app.before_request
@@ -239,7 +253,9 @@ def item_purchase(amount="0.00", product_name=""):
     for line in stdout.split():
         if not line.startswith("=>"):
             result.append(line)
-    #print stdout
+
+    if 'Successful' in stdout:
+        print "Successful transaction"
     return '<br>'.join(result)
 
 
