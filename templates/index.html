@@ -1,0 +1,140 @@
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
+
+
+
+<div class="background-image"></div>
+
+<div class="info">
+	<img src="https://uchicagomed.files.wordpress.com/2012/06/500px-dollar_sign_in_circle-svg.png" style="width: 250px; height:250px">
+	<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Simple_Music.svg/600px-Simple_Music.svg.png" style="width: 250px; height:250px">
+</div>
+
+<div class="content">
+Performband
+</div>
+
+
+<div class="piano"> 
+</div>
+
+<div class="login">
+	<a class="btn">Login</a>
+	<a class="btn">I'm a new busker! :D</a>
+</div>
+
+
+<div class="moar">
+	<a class="btn classy">Info</a>
+</div>
+
+<style>
+
+.login {
+	z-index: 99999;
+	position: absolute;
+	top: 15px;
+	right: 5px;
+
+}
+
+.btn {
+	border: 3px solid black;
+	padding: 5px;
+	-webkit-border-radius: 3px;
+	color: black;
+	-webkit-transition: background 1s;
+	-webkit-transition: color 0.5s;
+	cursor: hand;
+
+}
+
+.classy{
+	text-decoration: underline;
+	opacity: 0.75;
+}
+.btn:hover {
+	background-color: black;
+	padding: 5px;
+	-webkit-border-radius: 3px;
+	color: white;
+}
+
+.info {
+	z-index: 99999;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -265px;
+	margin-top: -50px;
+	background-color: rgba(255, 255, 255, 0.54);
+	/* opacity: 0.7; */
+	padding: 15px;
+	-webkit-border-radius: 5px;
+}
+.piano{
+	opacity: 0.4;
+	height: 89px;
+	width: 100%;
+	zoom: 0.7;
+	display: block;
+	z-index: 99999;
+	position: absolute;
+	bottom: -2px;
+	background-size: contain;
+	left: 0px;
+	background-image: url(https://content.ncetm.org.uk/images/microsites/secondary_magazine/issue_71/71_14.gif);
+}
+* {
+	box-sizing: border-box;
+	font-family: 'Source Sans Pro', sans-serif;  color: white;
+
+}
+
+html, body {
+	top: 0px;
+	left: 0px;
+}
+.background-image {
+	background-size: 100% 100%;
+	background-image: url(https://c4.staticflickr.com/4/3635/3297481840_1baba51179_z.jpg?zz=1);
+	background-size: cover;
+	display: block;
+	filter: blur(20px);
+	-webkit-filter: blur(20px);
+	height: 800px;
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	font-size: 75px;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.moar{
+	position: absolute;
+	z-index: 9999;
+	left: 5px;
+	top: 15px;
+}
+.content {
+	top: 50%;
+	left: 50%;
+	margin-left: -290px;
+	margin-top: -250px;
+	font-size: 100px;
+	position: fixed;
+	text-shadow: 1px 1px 5px black;
+	right: 0;
+	z-index: 2;
+	padding: 0 10px;
+}
+
+
+
+
+
+
+</style>

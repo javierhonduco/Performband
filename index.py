@@ -60,7 +60,7 @@ class Artist(db.Model):
 class Product(db.Model):
     id          = db.Column(db.Integer, primary_key=True)
     name        = db.Column(db.String(50))
-    price       = db.Column(db.String(50), default="0.0")
+    price       = db.Column(db.Integer)
     description = db.Column(db.Text)
     sold        = db.Column(db.Integer, default=0) 
     images      = db.Column(db.Text, default="")
@@ -80,10 +80,11 @@ db.create_all()
 
 @app.route("/utils/qr/<id>")
 def utils(id):
-    product = Artist.query.filter_by(id=id).first_or_404()
-    response = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl={name}&choe=UTF-8".format(name=product.nickname)
+    Product.query.filter_by(id=id).first_or_404()
+    uri = request.url_root 
+    response = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl={uri}product/{id}/buy&choe=UTF-8".format(uri=uri, id=id)
 
-    return '<a href="{}"><img src="{}" style="width:400px; height:400px"></a>'.format(response, response)
+    return to_json(response, 'qr_code')
 
 @app.route("/performer")
 def all_performers():
@@ -126,11 +127,7 @@ def buy_product(id):
     product.sold += 1
     db.session.commit()
 
-    print product.price
-    print type(product.price)
-    print
-
-    async(item_purchase, (product.price, product.name,))
+    async(item_purchase, ('0.0', 'pene',))
     return to_json(query, 'buy_product')
 
 @app.route("/performer/<nickname>")
@@ -158,37 +155,29 @@ def performer_by_nickname(nickname):
 
 def mock_data():
 
-    product1 = Product('Record', '10.00')
-    product1.description = "Music born thanks to a mix of cultures"
-    product1.images = "http://www.delebimba.com/images/articles/musico1.jpg"
+    product1 = Product('disco', '10.0')
+    product1.description = "Es un disco maraviyosho"
+    product1.images = "http://www.jpopasia.com/img/album-covers/3/19021-andltahrefhttpwwwjpo-qh3h.jpg"
 
-    product2 = Product('Private concert', '99.00')
-    product3 = Product('First studio record', '4.00')
-    product4 = Product('Meet & greet', '17.00')
+    product2 = Product('hehe', '1.0')
+    product3 = Product('Primer disco de estudio', '4.0')
+    product4 = Product('Meet & greet', '17.0')
 
-    artist1 = Artist('Jazz2day', 'music', '40.383333;-3.716667', images="http://1.bp.blogspot.com/-ZMecM_ebq5o/UJEsIWqTKnI/AAAAAAAAAAQ/HNCtQ-bWRKs/s1600/jazz-milan.jpg")
-    artist1.description = "Jazz group raised up in La Latina"
+    artist1 = Artist('LOLXDMAFIA', 'music', '2.23;4.2', images="http://mibrujula.com/wp/wp-content/uploads/2014/12/lory-money-detenido.png;http://www.notodo.com/v4/fotos/breves/detalle_1029.jpg")
+    artist1.description = "licenciado en ciencias del suaj con una gran mansion en senegal"
     artist1.products.append(product1)
     artist1.products.append(product2)
 
-    artist2 = Artist('Pikazzo', 'music', '40.383333;-3.716667', images="http://fotoefectos.com.es/wp-content/uploads/2011/11/fotomontaje-pintor-callejero.jpg")
+    artist2 = Artist('dat street', 'music', '2.123;5.123123', images="http://assets.vancitybuzz.com/wp-content/uploads/2013/05/Vancouver-International-Busker-Festival.png?f91710")
     
-    artist3 = Artist('AnnieBSweet', 'music', '40.383333;-3.716667', images="http://1.bp.blogspot.com/-rAoDuozLBJs/TVzhSBUkfhI/AAAAAAAAAio/qjrix9yetLc/s1600/Insadong+013.JPG")
+    artist3 = Artist('Annie B Sweet', 'music', '2.123;5.123123', images="http://assets.vancitybuzz.com/wp-content/uploads/2013/05/Vancouver-International-Busker-Festival.png?f91710")
     artist3.products.append(product3)
 
-    artist4 = Artist('Bass&Swing', 'dancer', '40.383333;-3.716667', images="http://i.ytimg.com/vi/geIY636eaEo/maxresdefault.jpg")
+    artist4 = Artist('Bass & Swing', 'music', '2.123;5.123123', images="http://assets.vancitybuzz.com/wp-content/uploads/2013/05/Vancouver-International-Busker-Festival.png?f91710")
     artist4.products.append(product4)
 
-    product5 = Product('Tip :)', '0.50')
-    artist5 = Artist('StreetDrawer', 'drawer', '40.383333;-3.716667', images="http://thumbs.dreamstime.com/x/famous-mural-graffiti-berlin-taken-cuvrystrasse-30204139.jpg")
-    artist5.products.append(product5)
-
-    product6 = Product('Hand-made high quality bubble soap', '4.0')
-    artist6 = Artist('Bubblemaker', 'performance', '40.383333;-3.716667', images="http://i.telegraph.co.uk/multimedia/archive/01455/bubbleman_1455955c.jpg")
-    artist6.products.append(product6)
-
-    db.session.add_all([artist1, artist2, product1, product2, artist5, product6])
-    db.session.add_all([artist3, artist4, product3, product4, artist6, product5])
+    db.session.add_all([artist1, artist2, product1, product2])
+    db.session.add_all([artist3, artist4, product3, product4])
     db.session.commit()
 
 @app.before_request
@@ -200,9 +189,8 @@ def before_request():
         pass # haha hackathon
 
 @app.route("/")
-def index():
     return render_template('index.html')
-
+    
 @app.route("/endpoints")
 def site_map():
     output = []
@@ -228,7 +216,7 @@ def page_not_found(e):
         }, 'error_response'), 404
 
 @app.route("/debug/purchase")
-def item_purchase(amount="0.00", product_name=""):
+def item_purchase(amount="0.0", product_name=""):
     command = "node ~/Desktop/snap/snap {} {}".format(amount, product_name)
     process = Popen(command, stdout=PIPE, stderr=PIPE, shell=True)
     stdout, stderr = process.communicate()
@@ -239,7 +227,6 @@ def item_purchase(amount="0.00", product_name=""):
     for line in stdout.split():
         if not line.startswith("=>"):
             result.append(line)
-    #print stdout
     return '<br>'.join(result)
 
 

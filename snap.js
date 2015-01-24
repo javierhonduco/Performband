@@ -40,7 +40,7 @@ var paymentTransactionData = {
             "GoodsType": "DigitalGoods",
             "OrderNumber": "1234",
             "SignatureCaptured": false,
-            "Amount": process.argv[2],
+            "Amount": parseFloat(process.argv[2], 2).toFixed(2),
             "CurrencyCode": "EUR",
             "TransactionDateTime": "2015-01-15T22:41:11.478-07:00",
             "PartialApprovalCapable": "NotSet",
