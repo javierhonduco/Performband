@@ -51,7 +51,7 @@ var paymentTransactionData = {
         }
     },
     "ApplicationProfileId": "72446",
-    "MerchantProfileId": "SNAP_00001"
+    "MerchantProfileId": "SNAP_00007"
 };
 
 
@@ -89,8 +89,8 @@ var paymentTransactionRequest = function() {
     
     //console.log("sessionToken64encoded  -> "+printTruncated(sessionToken64encoded));
     
-    //console.log("payment transaction data");
-    //console.log(paymentTransactionData);
+    console.log("payment transaction data");
+    console.log(paymentTransactionData);
     
     //console.log("POST                   -> "+url)
     
